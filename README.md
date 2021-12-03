@@ -1,7 +1,7 @@
 # WebApp-cloud
 Scalable Microservices-based Web Application in a Public Cloud
 
-The full description (Report) of the project in [Report](docs/Project-Report-Checkpoint_I_Group-06A.md)
+The full description (Report) of the project in [Report](docs/Project-Report-Checkpoint_II_Group-06A.md)
 
 ## Admin Info for RocketChat
 

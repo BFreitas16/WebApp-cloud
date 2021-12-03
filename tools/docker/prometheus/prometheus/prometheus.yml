@@ -26,5 +26,8 @@ scrape_configs:
     static_configs:
       - targets: 
         - 'localhost:9090'
-        #- 'rocketchat:9090'
+        - 'rocketchat1:3000'
+        # - 'rocketchat2:3000'
+        # - 'rocketchat3:3000'
+        # - 'rocketchat4:3000'
         #- 'mongo:9090'

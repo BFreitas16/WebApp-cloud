@@ -68,6 +68,16 @@
   become_method: sudo
         
   tasks:
+  # as there is no internal DNS service, we need to populate the /etc/hosts
+    - name: update /etc/hosts file for name resolution
+      lineinfile:
+        dest: /etc/hosts
+        regexp: '.*{{ item }}$'
+        line: "{{ hostvars[item]['ansible_default_ipv4']['address'] }} {{item}}"
+        state: present
+      when: hostvars[item]['ansible_default_ipv4']['address'] is defined
+      with_items: '{{groups.rocketchat}}'
+
     - name: Execute bootstrap script 
       script: ./../scripts/bootstrap.sh
 
@@ -89,6 +99,16 @@
   become_method: sudo
         
   tasks:
+    # as there is no internal DNS service, we need to populate the /etc/hosts
+    - name: update /etc/hosts file for name resolution
+      lineinfile:
+        dest: /etc/hosts
+        regexp: '.*{{ item }}$'
+        line: "{{ hostvars[item]['ansible_default_ipv4']['address'] }} {{item}}"
+        state: present
+      when: hostvars[item]['ansible_default_ipv4']['address'] is defined
+      with_items: '{{groups.monpro}}'
+
     - name: Execute bootstrap script 
       script: ./../scripts/bootstrap.sh
 

@@ -1,0 +1,44 @@
+# file: gcphosts
+# for GCP tenant hosts file
+
+# Modify the line with the ansible_host for the public IP address of your Tenant
+# For that, un-comment the following line before running instances configuration
+balancer            ansible_host=34.142.89.14 ansible_user=ubuntu ansible_connection=ssh
+grafana             ansible_host=35.197.244.83 ansible_user=ubuntu ansible_connection=ssh
+prometheus          ansible_host=34.142.112.17 ansible_user=ubuntu ansible_connection=ssh
+rocketchat1         ansible_host=34.105.133.247 ansible_user=ubuntu ansible_connection=ssh
+# rocketchat2        ansible_host=xxxxxxxxxxx ansible_user=ubuntu ansible_connection=ssh
+# rocketchat3        ansible_host=xxxxxxxxxxx ansible_user=ubuntu ansible_connection=ssh
+
+# The local deployment host VM
+[osmgmt]
+localhost           ansible_connection=local
+
+[loadbal]
+balancer
+
+[mongraf]
+grafana
+
+[monpro]
+prometheus
+
+# Contains the rocketchat servers
+[rocketchat]
+rocketchat1
+# rocketchat2
+# rocketchat3
+
+[monitoring]
+grafana
+prometheus
+
+[targets]
+balancer
+grafana
+prometheus
+rocketchat1
+# rocketchat2
+# rocketchat3
+
+

@@ -11,18 +11,23 @@ resource "kubernetes_service" "rocketchat-mongo" {
 
     labels = {
       app  = "rocketchat-mongo"
+      tier = "backend"
     }
+    namespace = kubernetes_namespace.application.id
   }
 
   spec {
     selector = {
       app  = "rocketchat-mongo"
+      tier = "backend"
     }
 
     port {
       port        = 27017
       target_port = 27017
     }
+
+    cluster_ip = "None"
   }
 }
 
@@ -35,6 +40,7 @@ resource "kubernetes_service" "rocketchat-server" {
       app  = "rocketchat-server"
       tier = "frontend"
     }
+    namespace = kubernetes_namespace.application.id
   }
 
   spec {

@@ -8,15 +8,22 @@
 resource "kubernetes_stateful_set" "rocketchat-mongo" {
   metadata {
     name = "rocketchat-mongo"
+
+    labels = {
+      app  = "rocketchat-mongo"
+      tier = "backend"
+    }
+    namespace = kubernetes_namespace.application.id
   }
 
   spec {
     service_name = "rocketchat-mongo"
-    replicas = 1
+    replicas = 2
 
     selector {
       match_labels = {
         app  = "rocketchat-mongo"
+        tier = "backend"
       }
     }
 
@@ -24,6 +31,7 @@ resource "kubernetes_stateful_set" "rocketchat-mongo" {
       metadata {
         labels = {
           app  = "rocketchat-mongo"
+          tier = "backend"
         }
       }
 
@@ -36,7 +44,7 @@ resource "kubernetes_stateful_set" "rocketchat-mongo" {
           image_pull_policy = "IfNotPresent"
 
           command = ["mongod"]
-          args = [ "--replSet","rs0","--smallfiles","--oplogSize","128","--storageEngine=mmapv1" ]
+          args = [ "--smallfiles", "--replSet", "rs0", "--bind_ip_all", "--noprealloc" ]
 
           port {
             container_port = 27017
@@ -48,21 +56,23 @@ resource "kubernetes_stateful_set" "rocketchat-mongo" {
           }
         }
 
-        # container to initialize the replica set
-        #container {
-        #  name              = "init-replica-set"
-        #  image             = "mongo:4.0"
-        #  image_pull_policy = "IfNotPresent"
-        #
-        #  command = ["/bin/sh", "-c", "for i in `seq 1 30`; do mongo mongo/rocketchat --eval \"rs.initiate({_id: 'rs0',members: [ { _id: 0, host: 'rocketchat-mongo-0.rocketchat-mongo:27017' } ]})\" &&s=$$? && break || s=$$?; echo \"Tried $$i times. Waiting 5 secs...\"; sleep 5; done; (exit $$s)"]
-        #}
+        # 2nd container is the sidecar container that will automatically configure the new MongoDB nodes to join the replica set.
+        container {
+          name              = "rocketchat-mongo-sidecar"
+          image             = "cvallance/mongo-k8s-sidecar"
+          image_pull_policy = "IfNotPresent"
+
+          env {
+            name  = "MONGO_SIDECAR_POD_LABELS"
+            value = "app=rocketchat-mongo,tier=backend"
+          }
+        }
       }
     }
 
     volume_claim_template {
       metadata {
         name = "mongo-db"
-        
       }
       spec {
         access_modes = ["ReadWriteOnce"]
@@ -74,6 +84,11 @@ resource "kubernetes_stateful_set" "rocketchat-mongo" {
       }
     }
   }
+
+  depends_on = [
+    helm_release.istiod,
+    kubernetes_namespace.application
+  ]
 }
 
 # Defines 2 rocketchat fronted
@@ -85,6 +100,7 @@ resource "kubernetes_deployment" "rocketchat-server" {
       app  = "rocketchat-server"
       tier = "frontend"
     }
+    namespace = kubernetes_namespace.application.id
   }
 
   spec {
@@ -114,23 +130,56 @@ resource "kubernetes_deployment" "rocketchat-server" {
             container_port = 3000
           }
           env {
+            name  = "Site_Url"
+            value = "http://localhost"
+          }
+          env {
             name  = "PORT"
             value = "3000"
           }
           env {
+            name  = "ROOT_URL"
+            value = "http://localhost:3000"
+          }
+          env {
             name  = "MONGO_URL"
-            value = "mongodb://rocketchat-mongo-0.rocketchat-mongo:27017/rocketchat" 
+            value = "mongodb://rocketchat-mongo-0.rocketchat-mongo.application,rocketchat-mongo-1.rocketchat-mongo.application:27017/rocketchat" 
           }
 
           env {
             name  = "MONGO_OPLOG_URL"
-            value = "mongodb://rocketchat-mongo-0.rocketchat-mongo:27017/local?replSet=rs0"
+            value = "mongodb://rocketchat-mongo-0.rocketchat-mongo.application,rocketchat-mongo-1.rocketchat-mongo.application:27017/local?replSet=rs0"
           }
 
         }
       }
     }
   }
+
+  depends_on = [
+    helm_release.istiod,
+    kubernetes_namespace.application,
+    kubernetes_stateful_set.rocketchat-mongo
+#    kubernetes_service.rocketchat-mongo
+  ]
 }
 
+#################################################################
+# Definition of Role Binding for MongoDB - ERROR 'pods is forbidden: User "system:serviceaccount:application:default" cannot list resource'
+#################################################################
+resource "kubernetes_cluster_role_binding" "default-view" {
+  metadata {
+    name = "default-view"
+  }
 
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "ClusterRole"
+    name      = "view"
+  }
+  subject {
+    kind      = "ServiceAccount"
+    name      = "default"
+    namespace = "application"
+  }
+}

@@ -23,7 +23,6 @@ data "google_client_config" "default" {
 #####################################################################
 # Modules for Provisioning and Deployment
 #####################################################################
-
 # The module in folder 'gcp_gke' defines the Kubernetes Cluster
 module "gcp_gke" {
   source   = "./gcp_gke"
@@ -35,6 +34,7 @@ module "gcp_gke" {
 module "gcp_k8s" {
   source   = "./gcp_k8s"
   host     = module.gcp_gke.host
+  cluster  = module.gcp_gke.cluster
 
   client_certificate     = module.gcp_gke.client_certificate
   client_key             = module.gcp_gke.client_key

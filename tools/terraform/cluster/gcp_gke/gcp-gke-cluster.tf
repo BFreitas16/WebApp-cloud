@@ -73,3 +73,7 @@ output "host" {
   sensitive = true
 }
 
+output "cluster" {
+  value     = google_container_cluster.rocketchat
+  sensitive = true
+}

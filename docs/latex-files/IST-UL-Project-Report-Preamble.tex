@@ -1,0 +1,226 @@
+% #############################################################################
+% Preamble for IST-UL-Project-Report in English or Portuguese
+% Required Packages and commands
+% --> Please Choose the MAIN LANGUAGE for the Thesis in package BABEL (below)
+% !TEX root = ./main.tex
+% #############################################################################
+% Version 1.0, October 2018
+% BY: Prof. Rui Santos Cruz, rui.s.cruz@tecnico.ulisboa.pt
+% #############################################################################
+% -----------------------------------------------------------------------------
+% PACKAGE ucs:
+% -----------------------------------------------------------------------------
+% The 'ucs' package provides support for using UTF-8 in LaTeX documents. 
+% However in most situations it is not required.
+\usepackage{ucs}
+% -----------------------------------------------------------------------------
+% PACKAGE utf8x:
+% -----------------------------------------------------------------------------
+% The 'utf8x' package contains support for using UTF-8 as input encoding. 
+\usepackage[utf8x]{inputenc}
+% -----------------------------------------------------------------------------
+% PACKAGE babel:
+% -----------------------------------------------------------------------------
+% The 'babel' package may correct some hyphenation issues of LaTeX. 
+% Select your MAIN LANGUAGE for the Thesis with the 'main=' option.
+% 
+\usepackage[main=english,portuguese]{babel}
+% -----------------------------------------------------------------------------
+% PACKAGE iflang:
+% -----------------------------------------------------------------------------
+% The 'iflang' package is used to help determine the language being used. 
+\usepackage{iflang}
+
+% ----------------------------------------------------------------------
+% Define default and cover page fonts.
+% ----------------------------------------------------------------------
+% Use Arial font as default
+%
+\renewcommand{\rmdefault}{phv}
+\renewcommand{\sfdefault}{phv}
+\def\FontLn{% 16 pt normal
+  \usefont{T1}{phv}{m}{n}\fontsize{16pt}{16pt}\selectfont}
+\def\FontLb{% 16 pt bold
+  \usefont{T1}{phv}{b}{n}\fontsize{16pt}{16pt}\selectfont}
+\def\FontMn{% 14 pt normal
+  \usefont{T1}{phv}{m}{n}\fontsize{14pt}{14pt}\selectfont}
+\def\FontMb{% 14 pt bold
+  \usefont{T1}{phv}{b}{n}\fontsize{14pt}{14pt}\selectfont}
+\def\FontSn{% 12 pt normal
+  \usefont{T1}{phv}{m}{n}\fontsize{12pt}{12pt}\selectfont}
+% ----------------------------------------------------------------------
+% Define page margins and line spacing.
+% ----------------------------------------------------------------------
+% > set the page margins (2.5cm minimum in every side, as per IST rules)
+%
+\usepackage{geometry}	
+\geometry{verbose,tmargin=2.5cm,bmargin=2.5cm,lmargin=2.5cm,rmargin=2.5cm}
+%
+% > allow setting line spacing (line spacing of 1.5, as per IST rules)
+%
+\usepackage{setspace}
+\renewcommand{\baselinestretch}{1.5}
+% ----------------------------------------------------------------------
+% Include external packages.
+\usepackage{graphicx}
+\usepackage{amsmath}  % AMS mathematical facilities for LaTeX.
+\usepackage{amsthm}   % Typesetting theorems (AMS style).
+\usepackage{amsfonts} % 
+\usepackage{subfigure}
+\usepackage{subfigmat}
+\usepackage{dcolumn}
+\newcolumntype{d}{D{.}{.}{-1}} % column aligned by the point separator '.'
+\newcolumntype{e}{D{E}{E}{-1}} % column aligned by the exponent 'E'
+\usepackage[pdftex]{hyperref} % enhance documents that are to be
+                              % output as HTML and PDF
+\hypersetup{colorlinks,       % color text of links and anchors,
+                              % eliminates borders around links
+            linkcolor=blue,  % color for normal internal links
+            anchorcolor=black,% color for anchor text
+            citecolor=cyan,  % color for bibliographical citations
+            filecolor=black,  % color for URLs which open local files
+            menucolor=black,  % color for Acrobat menu items
+            urlcolor=teal,   % color for linked URLs
+	        bookmarksopen=true,    % don't expand bookmarks
+	        bookmarksnumbered=true, % number bookmarks
+            }
+\usepackage[figure,table]{hypcap}
+\usepackage[format=hang,labelfont=bf,font=small]{caption} 
+\captionsetup[table]{skip=10pt}
+\usepackage{cite}
+\usepackage[printonlyused]{acronym}
+\usepackage{lipsum}
+
+% -----------------------------------------------------------------------------
+% PACKAGE Cleveref:
+% -----------------------------------------------------------------------------
+% Clever Referencing of document parts
+% Note: portuguese is supported through "brazilian" option
+\usepackage[\IfLanguageName{english}{english}{brazilian}]{cleveref}
+% -----------------------------------------------------------------------------
+% PACKAGES xcolor, color
+% -----------------------------------------------------------------------------
+% These packages are required for list code snippets.
+\usepackage{xcolor}
+\usepackage{color}
+% The following special color definitions are used in the IST Thesis
+\definecolor{forestgreen}{RGB}{34,139,34}
+\definecolor{orangered}{RGB}{239,134,64}
+\definecolor{lightred}{rgb}{1,0.4,0.5}
+\definecolor{orange}{rgb}{1,0.45,0.13}	
+\definecolor{darkblue}{rgb}{0.0,0.0,0.6}
+\definecolor{lightblue}{rgb}{0.1,0.57,0.7}
+\definecolor{gray}{rgb}{0.4,0.4,0.4}
+\definecolor{lightgray}{rgb}{0.95, 0.95, 0.95}
+\definecolor{darkgray}{rgb}{0.4, 0.4, 0.4}
+\definecolor{editorGray}{rgb}{0.95, 0.95, 0.95}
+\definecolor{editorOcher}{rgb}{1, 0.5, 0} % #FF7F00 -> rgb(239, 169, 0)
+\definecolor{chaptergrey}{rgb}{0.6,0.6,0.6}
+\definecolor{editorGreen}{rgb}{0, 0.5, 0} % #007C00 -> rgb(0, 124, 0)
+\definecolor{olive}{rgb}{0.17,0.59,0.20}
+\definecolor{brown}{rgb}{0.69,0.31,0.31}
+\definecolor{purple}{rgb}{0.38,0.18,0.81}
+
+
+
+
+\usepackage{listings}
+\lstset{escapeinside={<@}{@>}}
+\usepackage{minted}
+
+\lstdefinestyle{commandline} {%
+language={[WinXP]command.com},
+breaklines=true,
+%aboveskip=\baselineskip,
+belowskip=\baselineskip,
+showstringspaces=false,
+backgroundcolor=\color{black},
+basicstyle=\small\color{white}\ttfamily
+showstringspaces=false,
+keywordstyle=\color{cyan}\bfseries,
+stringstyle=\color{gray}\ttfamily,
+commentstyle=\color{green}\itshape,
+moredelim=[s][\color{yellow}\bfseries]{C:}{\>}
+}
+
+\lstdefinestyle{Bash} {%
+language=bash,
+breaklines=true,
+belowskip=\baselineskip,
+backgroundcolor=\color{lightgray},
+showstringspaces=false,
+keywordstyle=\color{black}\bfseries,
+basicstyle=\small\color{black}\ttfamily,
+stringstyle=\color{editorOcher}\ttfamily,
+commentstyle=\color{brown}\itshape,
+otherkeywords={xcode-select, mkdir,rm},
+moredelim=[s][\color{darkblue}]{~$},
+literate={~} {$\sim$}{1}
+}
+
+\lstdefinestyle{Rubytext} {%
+language=Ruby,
+breaklines=true,
+belowskip=\baselineskip,
+basicstyle=\small\ttfamily\color{black},
+backgroundcolor=\color{lightgray},
+showstringspaces=false,
+commentstyle = \ttfamily\color{red},
+keywordstyle=\ttfamily\color{blue},
+stringstyle=\color{orange}
+}
+\lstset{escapeinside={<@}{@>}}
+
+\lstdefinestyle{py} {%
+	language=python,
+	literate=%
+	*{0}{{{\color{red}0}}}1
+	{1}{{{\color{red}1}}}1
+	{2}{{{\color{red}2}}}1
+	{3}{{{\color{red}3}}}1
+	{4}{{{\color{red}4}}}1
+	{5}{{{\color{red}5}}}1
+	{6}{{{\color{red}6}}}1
+	{7}{{{\color{red}7}}}1
+	{8}{{{\color{red}8}}}1
+	{9}{{{\color{red}9}}}1,
+	basicstyle=\small\ttfamily,
+	numbers=left,
+	% numberstyle=\tiny,
+	% stepnumber=2,
+	numbersep=5pt,
+	tabsize=4,
+	extendedchars=true,
+	breaklines=true,
+	keywordstyle=\color{blue}\bfseries,
+	frame=b,
+	commentstyle=\color{brown}\itshape,
+	stringstyle=\color{editorOcher}\ttfamily,
+	showspaces=false,
+	showtabs=false,
+	xleftmargin=17pt,
+	framexleftmargin=17pt,
+	framexrightmargin=5pt,
+	framexbottommargin=4pt,
+	backgroundcolor=\color{lightgray},
+	showstringspaces=false,
+}
+
+
+
+
+
+
+
+
+
+
+% DEFINE COMMAND FOR: Acronyms listing Title depending on language
+\newcommand{\tlangAcronyms}{\IfLanguageName{english}{Acronyms}{Acr\'onimos}}
+% DEFINE COMMAND FOR: Degree Title depending on language
+\newcommand{\tlangDegree}{\IfLanguageName{english}{Information Systems and Computer Engineering}{Engenharia Informática e de Computadores}}
+% DEFINE COMMAND FOR: Course Title depending on language
+\newcommand{\tlangCourse}{\IfLanguageName{english}{Management and Administration of IT Infrastrutures and Services}{Administração e Gestão de Infraestruturas e Serviços de IT}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+

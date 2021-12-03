@@ -42,5 +42,9 @@ sudo snap install kubectl --classic
 # Clean up cached packages
 sudo apt-get clean all
 
+# Install istio
+curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.9.2 sh -
+mv istio-1.9.2 tools/terraform/cluster/
+
 # Define the right permissions for the private key
 sudo chmod 600 /home/vagrant/.ssh/id_rsa
